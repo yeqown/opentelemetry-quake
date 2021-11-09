@@ -2,6 +2,8 @@
 
 # opentelemetry
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/yeqown/opentelemetry-quake)](https://goreportcard.com/report/github.com/yeqown/opentelemetry-quake) [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/yeqown/opentelemetry-quake)
+
 适用 opentelemetry 规范的链路追踪仓库，开发这个仓库的目的是：简化项目中对接链路追踪的代码，并统一搜集行为。
 
 预期：
