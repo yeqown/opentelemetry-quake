@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/yeqown/opentelemetry-quake"
@@ -11,6 +12,8 @@ import (
 
 // Tracing middleware for resty client.
 func genPreRequestMiddleware() resty.RequestMiddleware {
+	tc := propagation.TraceContext{}
+
 	return func(client *resty.Client, request *resty.Request) error {
 		// 1. start a new span from request context.
 		// 2. inject trace info into request header
@@ -18,7 +21,9 @@ func genPreRequestMiddleware() resty.RequestMiddleware {
 		ctx, sp := opentelemetry.StartSpan(ctx, request.URL,
 			trace.WithSpanKind(trace.SpanKindClient),
 		)
+
 		request.SetContext(ctx)
+		tc.Inject(ctx, propagation.HeaderCarrier(request.Header))
 
 		sp.AddEvent("start", trace.WithTimestamp(request.Time))
 		// TODO(@yeqown): log more request information
