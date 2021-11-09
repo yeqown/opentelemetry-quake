@@ -21,9 +21,7 @@ type CarrierFactory func(h http.Header) propagation.TextMapCarrier
 
 // Tracing creates a new otel.Tracer if never created and returns a gin.HandlerFunc.
 // You only need to specify a CarrierFactory if your frontend doesn't obey TraceContext
-// specification https://www.w3.org/TR/trace-context. Such as sentry and jaeger, so you
-// need to customize a CarrierFactory to get the `parenttrace` and `tracestate`.
-// Check out the specification for more details.
+// specification https://www.w3.org/TR/trace-context, otherwise you can leave it nil.
 func Tracing(factory CarrierFactory) gin.HandlerFunc {
 	_, err := opentelemetry.Setup()
 	if err != nil {
@@ -108,6 +106,7 @@ func CaptureError() gin.HandlerFunc {
 			if err := recover(); err != nil {
 				// FIXED(@yeqown): record stack trace.
 				sp.RecordError(fmt.Errorf("%v", err), trace.WithStackTrace(true))
+				// TODO(@yeqown): let user to decide whether re-panic or not.
 			}
 		}()
 
