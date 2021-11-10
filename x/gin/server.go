@@ -1,8 +1,10 @@
 package otelgin
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +14,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/yeqown/opentelemetry-quake"
+	"github.com/yeqown/opentelemetry-quake/pkg"
 )
 
 // CarrierFactory is a factory function to tell Tracing middleware how to fill the
@@ -19,20 +22,35 @@ import (
 // for detail.
 type CarrierFactory func(h http.Header) propagation.TextMapCarrier
 
+// Config helps user to control Tracing middleware about how to
+// handle the request and response. Such as:
+// - log the request and response body or not,
+// - how to extract TraceContext from request.
+type Config struct {
+	Factory                 CarrierFactory
+	LogRequest, LogResponse bool
+}
+
+func DefaultConfig() Config {
+	return Config{
+		Factory:     builtinCarrierFactory,
+		LogRequest:  false,
+		LogResponse: false,
+	}
+}
+
+func builtinCarrierFactory(h http.Header) propagation.TextMapCarrier {
+	return propagation.HeaderCarrier(h)
+}
+
 // Tracing creates a new otel.Tracer if never created and returns a gin.HandlerFunc.
 // You only need to specify a CarrierFactory if your frontend doesn't obey TraceContext
 // specification https://www.w3.org/TR/trace-context, otherwise you can leave it nil.
-func Tracing(factory CarrierFactory) gin.HandlerFunc {
-	_, err := opentelemetry.Setup()
-	if err != nil {
-		// FIXED(@yeqown): panic or log records this tip?
-		fmt.Printf("WARNNING: setup opentelemetry failed: %v, this will cause traces collecting failed\n", err)
-	}
+func Tracing(config Config) gin.HandlerFunc {
 	tc := propagation.TraceContext{}
+	factory := config.Factory
 	if factory == nil {
-		factory = func(h http.Header) propagation.TextMapCarrier {
-			return propagation.HeaderCarrier(h)
-		}
+		factory = builtinCarrierFactory
 	}
 
 	return func(c *gin.Context) {
@@ -42,13 +60,37 @@ func Tracing(factory CarrierFactory) gin.HandlerFunc {
 			trace.WithSpanKind(trace.SpanKindServer),
 		)
 		defer sp.End()
-
 		// inject trace context to gin context
 		inject(c, ctx)
 
+		// use custom writer, so we record the response body.
+		rbw := &respBodyWriter{
+			body:           bytes.NewBufferString(""),
+			ResponseWriter: c.Writer,
+		}
+		c.Writer = rbw
+
+		if config.LogRequest {
+			body, err := c.GetRawData()
+			if err == nil && len(body) != 0 {
+				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+			}
+
+			// add start event and record request body.
+			sp.AddEvent("start",
+				trace.WithAttributes(attribute.String("request", pkg.ToString(body))),
+			)
+		}
+
 		c.Next()
 
-		// TODO(@yeqown): add more tags and logs.
+		// add end event and record response body.
+		if config.LogResponse {
+			sp.AddEvent("end",
+				trace.WithAttributes(attribute.String("response", rbw.body.String())),
+			)
+		}
+
 		sp.SetAttributes(
 			attribute.Bool("http.status.success", c.Writer.Status() < 400),
 			attribute.Int64("http.status.code", int64(c.Writer.Status())),

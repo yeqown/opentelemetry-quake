@@ -11,12 +11,16 @@ func ExampleTracing() {
 	r := gin.Default()
 
 	r.Use(
-		otelgin.Tracing(nil),
+		otelgin.Tracing(otelgin.DefaultConfig()),
 	)
 
 	// sentry trace header
 	r.Use(
-		otelgin.Tracing(sentryexporter.CarrierFactory),
+		otelgin.Tracing(otelgin.Config{
+			Factory:     sentryexporter.CarrierFactory,
+			LogRequest:  true,
+			LogResponse: true,
+		}),
 	)
 }
 
