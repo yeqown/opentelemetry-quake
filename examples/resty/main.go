@@ -12,7 +12,8 @@ import (
 func main() {
 	shutdown := opentelemetry.MustSetup(
 		opentelemetry.WithServerName("resty"),
-		opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
+		//opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
+		opentelemetry.WithOtlpExporter(),
 		opentelemetry.WithSampleRate(1.0),
 	)
 	defer shutdown()
@@ -34,6 +35,6 @@ func main() {
 		return
 	}
 
-	println("trace info:", sp.SpanContext().TraceID())
-	println("span info:", sp.SpanContext().SpanID())
+	println("trace info:", sp.SpanContext().TraceID().String())
+	println("span info:", sp.SpanContext().SpanID().String())
 }

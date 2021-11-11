@@ -31,8 +31,24 @@ type Config struct {
 	LogRequest, LogResponse bool
 }
 
-func DefaultConfig() Config {
-	return Config{
+func (c *Config) ApplyCarrierFactory(factory CarrierFactory) *Config {
+	if factory == nil {
+		return c
+	}
+	c.Factory = factory
+
+	return c
+}
+
+func (c *Config) EnableLogPayloads() *Config {
+	c.LogRequest = true
+	c.LogResponse = true
+
+	return c
+}
+
+func DefaultConfig() *Config {
+	return &Config{
 		Factory:     builtinCarrierFactory,
 		LogRequest:  false,
 		LogResponse: false,
@@ -46,12 +62,16 @@ func builtinCarrierFactory(h http.Header) propagation.TextMapCarrier {
 // Tracing creates a new otel.Tracer if never created and returns a gin.HandlerFunc.
 // You only need to specify a CarrierFactory if your frontend doesn't obey TraceContext
 // specification https://www.w3.org/TR/trace-context, otherwise you can leave it nil.
-func Tracing(config Config) gin.HandlerFunc {
-	tc := propagation.TraceContext{}
+func Tracing(config *Config) gin.HandlerFunc {
+	if config == nil {
+		config = DefaultConfig()
+	}
 	factory := config.Factory
 	if factory == nil {
 		factory = builtinCarrierFactory
 	}
+
+	tc := propagation.TraceContext{}
 
 	return func(c *gin.Context) {
 		// try to extract remote trace from request header.

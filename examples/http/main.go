@@ -16,6 +16,7 @@ import (
 func main() {
 	shutdown, err := opentelemetry.Setup(
 		opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
+		//opentelemetry.WithOtlpExporter(),
 		opentelemetry.WithServerName("demo"),
 		opentelemetry.WithSampleRate(1.0),
 	)
@@ -26,7 +27,10 @@ func main() {
 
 	r := gin.Default()
 	r.Use(
-		otelgin.Tracing(sentryexporter.CarrierFactory),
+		otelgin.Tracing(otelgin.DefaultConfig().
+			ApplyCarrierFactory(sentryexporter.CarrierFactory).
+			EnableLogPayloads(),
+		),
 		otelgin.CaptureError(),
 	)
 	r.GET("/ping", func(c *gin.Context) {
