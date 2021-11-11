@@ -13,7 +13,7 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/yeqown/opentelemetry-quake"
+	otelquake "github.com/yeqown/opentelemetry-quake"
 	"github.com/yeqown/opentelemetry-quake/pkg"
 )
 
@@ -76,7 +76,7 @@ func Tracing(config *Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// try to extract remote trace from request header.
 		parentCtx := tc.Extract(c.Request.Context(), factory(c.Request.Header))
-		ctx, sp := opentelemetry.StartSpan(parentCtx, c.FullPath(),
+		ctx, sp := otelquake.StartSpan(parentCtx, c.FullPath(),
 			trace.WithSpanKind(trace.SpanKindServer),
 		)
 		defer sp.End()
@@ -141,7 +141,7 @@ func extract(c *gin.Context) context.Context {
 // StartSpan is a wrapper of opentelemetry.StartSpan, but it extracts span from gin.Context rather
 // than context.Context. The return span is that derived by root span which is created by Tracing middleware.
 func StartSpan(c *gin.Context, op string, opts ...trace.SpanStartOption) (ctx context.Context, sp trace.Span) {
-	ctx, sp = opentelemetry.StartSpan(extract(c), op, opts...)
+	ctx, sp = otelquake.StartSpan(extract(c), op, opts...)
 	return ctx, sp
 }
 
@@ -164,19 +164,29 @@ func CaptureError() gin.HandlerFunc {
 			return
 		}
 
+		var (
+			r        interface{}
+			panicked bool
+		)
+
 		defer func() {
-			if err := recover(); err != nil {
+			if r = recover(); r != nil {
+				panicked = true
 				// FIXED(@yeqown): record stack trace.
-				sp.RecordError(fmt.Errorf("%v", err), trace.WithStackTrace(true))
+				sp.RecordError(fmt.Errorf("%v", r))
 				// TODO(@yeqown): let user to decide whether re-panic or not.
 			}
 		}()
 
 		c.Next()
 
-		if c.Writer.Status() >= 400 {
-			sp.RecordError(fmt.Errorf("%v", c.Writer.Status()))
+		if c.Writer.Status() >= 400 || panicked {
 			sp.SetStatus(codes.Error, "ERR")
+			if panicked {
+				sp.RecordError(fmt.Errorf("%v", r), trace.WithStackTrace(true))
+			} else {
+				sp.RecordError(fmt.Errorf("%v", c.Writer.Status()))
+			}
 		} else {
 			sp.SetStatus(codes.Ok, "OK")
 		}

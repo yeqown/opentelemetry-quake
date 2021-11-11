@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/yeqown/opentelemetry-quake"
+	otelquake "github.com/yeqown/opentelemetry-quake"
 )
 
 // Tracing middleware for resty client.
@@ -18,7 +18,7 @@ func genPreRequestMiddleware() resty.RequestMiddleware {
 		// 1. start a new span from request context.
 		// 2. inject trace info into request header
 		ctx := request.Context()
-		ctx, sp := opentelemetry.StartSpan(ctx, request.URL,
+		ctx, sp := otelquake.StartSpan(ctx, request.URL,
 			trace.WithSpanKind(trace.SpanKindClient),
 		)
 

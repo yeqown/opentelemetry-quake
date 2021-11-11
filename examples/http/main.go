@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/yeqown/opentelemetry-quake"
+	otelquake "github.com/yeqown/opentelemetry-quake"
 	sentryexporter "github.com/yeqown/opentelemetry-quake/exporter/sentry"
 	otelgin "github.com/yeqown/opentelemetry-quake/x/gin"
 
@@ -14,11 +14,11 @@ import (
 )
 
 func main() {
-	shutdown, err := opentelemetry.Setup(
-		opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
+	shutdown, err := otelquake.Setup(
+		otelquake.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
 		//opentelemetry.WithOtlpExporter(),
-		opentelemetry.WithServerName("demo"),
-		opentelemetry.WithSampleRate(1.0),
+		otelquake.WithServerName("demo"),
+		otelquake.WithSampleRate(1.0),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func main() {
 
 func processWithSpan(ctx context.Context) {
 	// start a span
-	ctx, sp := opentelemetry.StartSpan(ctx, "processWithSpan")
+	ctx, sp := otelquake.StartSpan(ctx, "processWithSpan")
 	println("traceId: ", sp.SpanContext().TraceID().String())
 	println("sampled: ", sp.SpanContext().TraceFlags().IsSampled())
 	defer sp.End()

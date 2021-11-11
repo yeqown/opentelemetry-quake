@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="983px" height="1135px" viewBox="0 0 983 1135" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>collector</title>
+    <defs>
+        <rect id="path-1" x="462" y="293" width="174" height="87" rx="20"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="174" height="87" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="collector" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="983" height="1135"></rect>
+        <g id="sdk-holder" transform="translate(112.000000, 94.000000)">
+            <rect id="矩形" stroke="#6200EA" stroke-width="3" fill="#FFCA28" x="1.5" y="1.5" width="759" height="349" rx="20"></rect>
+            <text id="OpenTelemetry-SDK" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="284.41" y="46">OpenTelemetry SDK</tspan>
+            </text>
+        </g>
+        <rect id="vendor-ingest-2" stroke="#6200EA" stroke-width="3" fill="#00E5FF" x="333.5" y="858.5" width="539" height="179" rx="20"></rect>
+        <g id="vendor-ingest-1" transform="translate(348.000000, 873.000000)">
+            <rect id="矩形备份-2" stroke="#6200EA" stroke-width="3" fill="#00E5FF" x="1.5" y="1.5" width="539" height="179" rx="20"></rect>
+            <text id="Vendor-Ingest" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="205" y="34">Vendor Ingest</tspan>
+            </text>
+            <text id="Jaeger-/-Sentry-/-Zi" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="114" y="98">Jaeger / Sentry / Zipkin and etc.</tspan>
+            </text>
+        </g>
+        <g id="otlp-collector" transform="translate(112.000000, 574.000000)">
+            <g id="编组">
+                <rect id="矩形备份" stroke="#6200EA" stroke-width="3" fill="#FF9E80" x="1.5" y="1.5" width="319" height="179" rx="20"></rect>
+                <text id="OpenTelemetry-Collec" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                    <tspan x="42.22" y="38">OpenTelemetry Collector</tspan>
+                    <tspan x="134.63" y="66">OTLP</tspan>
+                </text>
+            </g>
+            <g id="编组-3" transform="translate(0.000000, 91.000000)">
+                <path d="M158.5,1.5 L158.5,89.5 L20,89.5 C14.8913661,89.5 10.2663661,87.429317 6.91852455,84.0814755 C3.57068303,80.7336339 1.5,76.1086339 1.5,71 L1.5,71 L1.5,1.5 L158.5,1.5 Z" id="矩形" stroke="#6236FF" stroke-width="3" fill="#1DE9B6"></path>
+                <text id="Trace-Exporter" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#000000">
+                    <tspan x="58.488" y="37">Trace</tspan>
+                    <tspan x="47.536" y="59">Exporter</tspan>
+                </text>
+            </g>
+            <g id="编组-2" transform="translate(161.000000, 91.000000)">
+                <path d="M158.5,1.5 L158.5,89.5 L20,89.5 C14.8913661,89.5 10.2663661,87.429317 6.91852455,84.0814755 C3.57068303,80.7336339 1.5,76.1086339 1.5,71 L1.5,71 L1.5,1.5 L158.5,1.5 Z" id="矩形备份-3" stroke="#6236FF" stroke-width="3" fill="#1DE9B6" transform="translate(80.000000, 45.500000) scale(-1, 1) translate(-80.000000, -45.500000) "></path>
+                <text id="Metric-Exporter" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#000000">
+                    <tspan x="55.664" y="37">Metric</tspan>
+                    <tspan x="47.536" y="59">Exporter</tspan>
+                </text>
+            </g>
+        </g>
+        <path id="路径" d="M444.834115,666.999809 C443.882036,672.675327 438.946058,676.999996 433,676.999996 C426.372583,676.999996 421,671.627413 421,664.999996 C421,658.372579 426.372583,652.999996 433,652.999996 C438.94571,652.999996 443.881458,657.324158 444.833947,662.999187 L608.887041,662.999996 L608.887,848.97 L618.887041,848.970836 L606.887041,872.970836 L594.887041,848.970836 L604.887,848.97 L604.887,666.999 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <g id="编组-4" transform="translate(162.000000, 160.000000)">
+            <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#00E5FF" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Tracer" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="49.37" y="37">Tracer</tspan>
+            </text>
+        </g>
+        <g id="编组-4备份" transform="translate(662.000000, 160.000000)">
+            <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#FF9E80" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Meter" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="52.27" y="37">Meter</tspan>
+            </text>
+        </g>
+        <g id="编组-4备份-5" transform="translate(638.000000, 250.000000)" fill="#FF9E80" stroke="#6236FF" stroke-width="2">
+            <rect id="矩形" x="1" y="1" width="158" height="26" rx="10"></rect>
+        </g>
+        <g id="编组-4备份-6" transform="translate(646.000000, 257.000000)" fill="#FF9E80" stroke="#6236FF" stroke-width="2">
+            <rect id="矩形" x="1" y="1" width="158" height="26" rx="10"></rect>
+        </g>
+        <g id="编组-4备份-7" transform="translate(654.000000, 265.000000)" fill="#FF9E80" stroke="#6236FF" stroke-width="2">
+            <rect id="矩形" x="1" y="1" width="158" height="26" rx="10"></rect>
+        </g>
+        <g id="编组-4备份-3" transform="translate(662.000000, 272.000000)">
+            <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#FF9E80" x="1" y="1" width="158" height="26" rx="10"></rect>
+            <text id="instrument" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#000000">
+                <tspan x="39.256" y="20">instrument</tspan>
+            </text>
+        </g>
+        <use id="aggregator-bg" stroke="#979797" mask="url(#mask-2)" stroke-width="4" stroke-linecap="round" stroke-dasharray="4" xlink:href="#path-1"></use>
+        <g id="aggregator" transform="translate(469.000000, 306.000000)">
+            <g id="编组-4备份-8">
+                <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#FF9E80" x="1" y="1" width="158" height="26" rx="10"></rect>
+                <text id="aggregator" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#000000">
+                    <tspan x="38.184" y="20">aggregator</tspan>
+                </text>
+            </g>
+            <g id="编组-4备份-9" transform="translate(0.000000, 34.000000)">
+                <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#FF9E80" x="1" y="1" width="158" height="26" rx="10"></rect>
+                <text id="Metric-Reader" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" fill="#000000">
+                    <tspan x="25.968" y="20">Metric Reader</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="编组-4备份-4" transform="translate(662.000000, 360.000000)">
+            <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#FF9E80" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Metric-Exporter" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" line-spacing="22" fill="#000000">
+                <tspan x="49.16" y="29">Metric</tspan>
+                <tspan x="39" y="51">Exporter</tspan>
+            </text>
+        </g>
+        <g id="编组-4备份-2" transform="translate(413.000000, 211.000000)">
+            <rect id="矩形" stroke="#6236FF" stroke-width="2" fill="#D8D8D8" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Propagator" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" fill="#000000">
+                <tspan x="26.87" y="37">Propagator</tspan>
+            </text>
+        </g>
+        <g id="编组-5" transform="translate(162.000000, 260.000000)">
+            <rect id="矩形备份-4" stroke="#6236FF" stroke-width="2" fill="#00E5FF" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Span-Processor" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" line-spacing="22" fill="#000000">
+                <tspan x="55.75" y="29">Span</tspan>
+                <tspan x="32" y="51">Processor</tspan>
+            </text>
+        </g>
+        <g id="编组-6" transform="translate(162.000000, 360.000000)">
+            <rect id="矩形备份-5" stroke="#6236FF" stroke-width="2" fill="#00E5FF" x="1" y="1" width="158" height="58" rx="10"></rect>
+            <text id="Span-Exporter" font-family="PingFangSC-Semibold, PingFang SC" font-size="20" font-weight="500" line-spacing="22" fill="#000000">
+                <tspan x="55.52" y="29">Span</tspan>
+                <tspan x="39" y="51">Exporter</tspan>
+            </text>
+        </g>
+        <rect id="矩形" stroke="#979797" fill="#D8D8D8" x="321.5" y="177.5" width="340" height="25"></rect>
+        <text id="shard-context" font-family="PingFangSC-Semibold, PingFang SC" font-size="16" font-weight="500" line-spacing="20" fill="#000000">
+            <tspan x="439" y="197">shard context</tspan>
+        </text>
+        <path id="直线" d="M241.5,213.5 C245.365993,213.5 248.5,216.634007 248.5,220.5 C248.5,224.026122 245.892812,226.943302 242.50101,227.428967 L242.5,246.5 L248.5,246.5 L241.5,260.5 L234.5,246.5 L240.5,246.5 L240.499992,227.42911 C237.185179,226.954959 234.619525,224.158463 234.504059,220.74065 L234.5,220.5 C234.5,216.634007 237.634007,213.5 241.5,213.5 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="直线-2" d="M241.5,313.5 C245.365993,313.5 248.5,316.634007 248.5,320.5 C248.5,324.026122 245.892812,326.943302 242.50101,327.428967 L242.5,346.5 L248.5,346.5 L241.5,360.5 L234.5,346.5 L240.5,346.5 L240.499992,327.42911 C237.185179,326.954959 234.619525,324.158463 234.504059,320.74065 L234.5,320.5 C234.5,316.634007 237.634007,313.5 241.5,313.5 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <line x1="741.5" y1="220.5" x2="741" y2="272" id="直线-3" stroke="#6236FF" stroke-width="2" stroke-linecap="square"></line>
+        <path id="路径-2" d="M239.510036,408.000052 C246.137424,407.980491 251.525841,413.337193 251.545402,419.964581 C251.562953,425.910724 247.252711,430.859518 241.579871,431.828215 L241.929,549.994 L251.92911,549.964686 L240,574 L227.929214,550.035524 L237.929,550.005 L237.579583,431.839801 C231.999134,430.920113 227.712255,426.148774 227.550207,420.340381 L227.545507,420.035419 C227.525945,413.408031 232.882647,408.019614 239.510036,408.000052 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="路径-3" d="M190.641214,408.000987 C197.268086,407.916003 202.70912,413.219251 202.794104,419.846124 C202.870349,425.791565 198.609515,430.782505 192.946854,431.807432 L194.269,534.967 L348,534.967324 C349.054362,534.967324 349.918165,535.783202 349.994514,536.818062 L350,536.967324 L350,978 C350,979.054362 349.184122,979.918165 348.149262,979.994514 L348,980 L106.961,980 L106.961757,988.568374 C106.961757,989.312529 106.393986,989.924075 105.668006,989.993446 L105.530131,990 C105.307878,990 105.088677,989.948254 104.889888,989.848859 L104.889888,989.848859 L83.7534545,979.280642 C83.0462619,978.927046 82.7596154,978.067107 83.1132118,977.359914 C83.2517412,977.082855 83.4763956,976.858201 83.7534545,976.719671 L83.7534545,976.719671 L104.889888,966.151454 C105.597081,965.797858 106.45702,966.084505 106.810617,966.791697 C106.910011,966.990486 106.961757,967.209687 106.961757,967.43194 L106.961757,967.43194 L106.961,976 L345.999,976 L345.999,538.967 L192.295091,538.967324 C191.250277,538.967324 190.390732,538.165618 190.302543,537.140825 L190.295255,536.99297 L188.947192,431.858785 C183.259931,430.979562 178.872324,426.099446 178.796077,420.153876 C178.711094,413.527004 184.014342,408.08597 190.641214,408.000987 Z" transform="translate(216.147545, 699.000000) scale(-1, 1) translate(-216.147545, -699.000000) " fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="路径-4" d="M741.448704,408.00011 C748.076061,407.97178 753.47156,413.321348 753.49989,419.948704 C753.525307,425.894469 749.222123,430.848729 743.551063,431.82534 L743.999982,536.958775 C744.004502,538.016315 743.187575,538.885019 742.149705,538.961807 L742,538.967324 L644,538.967 L644,850.333 L652.568374,850.333333 C653.312529,850.333333 653.924075,850.901105 653.993446,851.627084 L654,851.76496 C654,851.987213 653.948254,852.206413 653.848859,852.405202 L653.848859,852.405202 L643.280642,873.541636 C642.927046,874.248829 642.067107,874.535475 641.359914,874.181879 C641.082855,874.043349 640.858201,873.818695 640.719671,873.541636 L640.719671,873.541636 L630.151454,852.405202 C629.797858,851.69801 630.084505,850.83807 630.791697,850.484474 C630.990486,850.38508 631.209687,850.333333 631.43194,850.333333 L631.43194,850.333333 L640,850.333 L640,536.967324 C640,535.912962 640.815878,535.049159 641.850738,534.97281 L642,534.967324 L739.991,534.967 L739.550109,431.842443 C733.870907,430.914351 729.525526,425.997061 729.50011,420.051296 C729.47178,413.423939 734.821348,408.02844 741.448704,408.00011 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="路径-5" d="M742,408 C748.627417,408 754,413.372583 754,420 C754,425.94571 749.675838,430.881458 744.000809,431.833947 L744,538.967324 L310,538.967 L310,550 L320,550 L308,574 L296,550 L306,550 L306,534.967324 L740,534.967 L740.000187,431.834115 C734.324668,430.882036 730,425.946058 730,420 C730,413.372583 735.372583,408 742,408 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="路径-6" d="M741.438864,293.000267 C745.30471,292.966503 748.465969,296.073018 748.499733,299.938864 C748.530696,303.483933 745.9209,306.436493 742.506422,306.928112 C741.650053,321.725442 734.82033,330.178677 722.141421,331.989949 C709.668687,333.771769 685.647243,335.54951 650.050453,337.327129 L650.031,337.328 L650.31838,343.32329 L636,337 L649.64966,329.33927 L649.936,335.33 L649.949545,335.329676 C685.486877,333.555027 709.465433,331.7805 721.858579,330.010051 C733.500184,328.346964 739.674612,320.751169 740.503927,306.928285 C737.135195,306.450058 734.530896,303.56803 734.500267,300.061136 C734.466503,296.19529 737.573018,293.034031 741.438864,293.000267 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <path id="路径-7" d="M538.998975,375.102067 C541.704029,372.340077 546.135943,372.293921 548.897933,374.998975 C551.347562,377.398107 551.660904,381.155596 549.813278,383.901689 C554.587707,386.381075 562.356089,388.094389 573.084443,389.003572 C581.249768,389.695548 592.583702,390.046749 607.082479,390.056721 L608.676719,390.056455 C619.843123,390.0452 632.828462,389.837813 647.631092,389.434097 L647.975,389.424 L647.792918,383.430463 L662,390 L648.220121,397.423943 L648.036,391.423 L647.684105,391.433395 C632.852281,391.837904 619.839472,392.045676 608.644035,392.056514 L607.045607,392.056715 C592.508328,392.046092 581.132901,391.692813 572.915557,390.996428 C561.613426,390.038621 553.461013,388.195791 548.422311,385.426425 C545.697429,387.653363 541.675115,387.521032 539.102067,385.001025 C536.340077,382.295971 536.293921,377.864057 538.998975,375.102067 Z" fill="#6236FF" fill-rule="nonzero"></path>
+        <g id="编组-7" transform="translate(84.000000, 472.000000)">
+            <rect id="矩形" stroke="#979797" fill="#448AFF" x="0.5" y="3.5" width="43" height="43" rx="21.5"></rect>
+            <text id="A" font-family="PingFangSC-Semibold, PingFang SC" font-size="36" font-weight="500" fill="#FFFFFF">
+                <tspan x="10.278" y="38">A</tspan>
+            </text>
+        </g>
+        <g id="编组-7备份" transform="translate(563.000000, 604.000000)">
+            <rect id="矩形" stroke="#979797" fill="#448AFF" x="0.5" y="3.5" width="43" height="43" rx="21.5"></rect>
+            <text id="B" font-family="PingFangSC-Semibold, PingFang SC" font-size="36" font-weight="500" fill="#FFFFFF">
+                <tspan x="10.08" y="38">B</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

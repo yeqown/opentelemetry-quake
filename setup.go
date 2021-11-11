@@ -1,4 +1,4 @@
-package opentelemetry
+package otelquake
 
 import (
 	"context"
