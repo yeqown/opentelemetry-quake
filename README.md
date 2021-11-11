@@ -19,7 +19,45 @@
 - [x] sdk 可用
 - [x] 采集堆栈信息
 - [x] 跟前端链路打通
-- [ ] 中间件完成与优化
+- [x] 中间件完成与优化
 - [ ] 处理代码中 `TODO` 和 `FIXME`
-- [ ] 记录请求和响应（可选）
+- [x] 记录请求和响应（可选）
 - [ ] 补充测试用例
+
+
+### Deploy OpenTelemetry Collector
+
+https://opentelemetry.io/docs/collector/getting-started/
+
+***k8s***
+
+```sh
+kubectl apply -f ./.deploy/k8s-otelcol.yaml
+```
+
+### Supplement
+
+***1. How build you custom collector***
+
+> For more details, please check out the .build folder.
+
+```sh
+## install build
+go install go.opentelemetry.io/collector/cmd/builder@latest
+
+## write build config
+cat > ~/.otelcol-builder.yaml <<EOF
+exporters:
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/alibabacloudlogserviceexporter v0.37.0"
+EOF
+
+## execute build command
+
+builder --output-path=.
+# or builder --config ~/.otelcol-builder.yaml
+```
+
+### Reference
+
+- https://github.com/open-telemetry/opentelemetry-collector/tree/main/cmd/builder
+- https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/6218
