@@ -1,0 +1,8 @@
+dist:
+  module: "github.com/yeqown/opentelemetry-quake"
+  name: otelcol
+  description: "OpenTelemetry Collector with sentry exporter enabled"
+  otelcol_version: "0.38.0"
+  version: "1.0.0"
+exporters:
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sentryexporter v0.38.0"

@@ -121,7 +121,7 @@ data:
         endpoint: "otel-collector.default:4317" # Replace with a real endpoint.
         insecure: true
       sentry:
-        dsn: https://1c2d1ae347944688ae7593a33e40c0f2@sentry.medlinker.com/33
+        dsn: mydsn
         insecure_skip_verify: true
     service:
       extensions: [zpages]
