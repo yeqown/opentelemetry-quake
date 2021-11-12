@@ -2,4 +2,5 @@
 buildcache
 
 go.sum
+go.work.sum
 otelcol

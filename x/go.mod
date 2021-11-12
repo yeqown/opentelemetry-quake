@@ -10,5 +10,5 @@ require (
 	go.opentelemetry.io/otel/trace v1.1.0
 )
 
-replace github.com/yeqown/opentelemetry-quake => ../
+// replace github.com/yeqown/opentelemetry-quake => ../
 replace github.com/yeqown/opentelemetry-quake/sentryexporter => ../exporter/sentry
