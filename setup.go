@@ -16,7 +16,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
-	sentryexporter "github.com/yeqown/opentelemetry-quake/exporter/sentry"
+	sentryexporter "github.com/yeqown/opentelemetry-quake/sentryexporter"
 )
 
 // newExporter returns a console exporterEnum.

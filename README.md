@@ -23,6 +23,7 @@
 - [ ] 处理代码中 `TODO` 和 `FIXME`
 - [x] 记录请求和响应（可选）
 - [ ] 补充测试用例
+- [ ] 改造 sentryexporter（TraceExporter）记录 StackTrace信息或者给官方提交 PR
 
 ### [Examples](./examples/README.md)
 

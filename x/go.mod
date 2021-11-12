@@ -11,3 +11,4 @@ require (
 )
 
 replace github.com/yeqown/opentelemetry-quake => ../
+replace github.com/yeqown/opentelemetry-quake/sentryexporter => ../exporter/sentry

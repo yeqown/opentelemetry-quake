@@ -7,10 +7,11 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/yeqown/opentelemetry-quake v1.0.0
 	github.com/yeqown/opentelemetry-quake/x v1.0.0
+	github.com/yeqown/opentelemetry-quake/sentryexporter v1.0.0
 )
 
 replace (
 	github.com/yeqown/opentelemetry-quake => ../
-	github.com/yeqown/opentelemetry-quake/pkg/sentry-exporter => ../pkg/sentry-exporter
+	github.com/yeqown/opentelemetry-quake/sentryexporter => ../exporter/sentry
 	github.com/yeqown/opentelemetry-quake/x => ../x
 )

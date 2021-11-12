@@ -279,6 +279,7 @@ func convertToSentrySpan(span sdktrace.ReadOnlySpan) (sentrySpan *sentry.Span) {
 		StartTime:   span.StartTime(),
 		EndTime:     span.EndTime(),
 		Status:      status,
+		// TODO(@yeqown): fill Data with custom attributes.
 	}
 
 	if parent := span.Parent(); parent.IsValid() {

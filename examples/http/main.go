@@ -7,7 +7,7 @@ import (
 	"time"
 
 	otelquake "github.com/yeqown/opentelemetry-quake"
-	sentryexporter "github.com/yeqown/opentelemetry-quake/exporter/sentry"
+	sentryexporter "github.com/yeqown/opentelemetry-quake/sentryexporter"
 	otelgin "github.com/yeqown/opentelemetry-quake/x/gin"
 
 	"github.com/gin-gonic/gin"
