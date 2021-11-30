@@ -35,7 +35,11 @@ func (hca HeaderCarrierAdapter) Keys() []string {
 
 func CarrierFactory(h http.Header) propagation.TextMapCarrier {
 	carrier := HeaderCarrierAdapter{Header: h}
-	carrier.Set("traceparent", convertSentryTraceToParent(h.Get("sentry-trace")))
+
+	if value := h.Get("sentry-trace"); value != "" {
+		carrier.Set("traceparent", convertSentryTraceToParent(value))
+	}
+
 	return &carrier
 }
 

@@ -3,11 +3,14 @@ package otelresty
 import (
 	"time"
 
+	"go.opentelemetry.io/otel/attribute"
+
 	"github.com/go-resty/resty/v2"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 
 	otelquake "github.com/yeqown/opentelemetry-quake"
+	"github.com/yeqown/opentelemetry-quake/pkg"
 )
 
 // Tracing middleware for resty client.
@@ -25,12 +28,14 @@ func genPreRequestMiddleware() resty.RequestMiddleware {
 		request.SetContext(ctx)
 		tc.Inject(ctx, propagation.HeaderCarrier(request.Header))
 
-		sp.AddEvent("start", trace.WithTimestamp(request.Time))
-		// TODO(@yeqown): log more request information
-		//sp.SetAttributes(
-		//	trace.StringAttribute("http.method", request.Method),
-		//	trace.StringAttribute("http.url", request.URL.String()),
-		//)
+		sp.AddEvent("request",
+			trace.WithTimestamp(time.Now()),
+			trace.WithAttributes(
+				//attribute.String("raw",), TODO: get request data from request.Body
+				attribute.String("method", request.Method),
+				attribute.String("url", request.URL),
+			),
+		)
 
 		return nil
 	}
@@ -44,8 +49,13 @@ func genPostRequestMiddleware() resty.ResponseMiddleware {
 		sp := trace.SpanFromContext(ctx)
 		defer sp.End()
 
-		// TODO(@yeqown): log more response information
-		sp.AddEvent("end", trace.WithTimestamp(time.Now()))
+		sp.AddEvent("response",
+			trace.WithTimestamp(time.Now()),
+			trace.WithAttributes(
+				attribute.String("raw", pkg.ToString(response.Body())),
+				attribute.String("status", response.Status()),
+			),
+		)
 
 		return nil
 	}

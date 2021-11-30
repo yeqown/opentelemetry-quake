@@ -3,6 +3,7 @@ package otelgrpc
 import (
 	"context"
 
+	conventions "go.opentelemetry.io/collector/model/semconv/v1.5.0"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -40,21 +41,24 @@ func TracingClientInterceptor(optFuncs ...Option) grpc.UnaryClientInterceptor {
 		//}
 
 		ctxWithSpan, clientSpan := otel.Tracer(tracerName).
-			Start(ctx, method, trace.WithSpanKind(trace.SpanKindClient))
+			Start(ctx, method,
+				trace.WithSpanKind(trace.SpanKindClient),
+				trace.WithAttributes(attribute.Bool(conventions.AttributeRPCService, true)),
+			)
 		defer clientSpan.End()
 		ctx = injectSpanContext(ctxWithSpan)
 
 		if traceOpts.logPayloads {
-			clientSpan.AddEvent("start", trace.WithAttributes(
-				attribute.String("request", marshalPbMessage(req))),
+			clientSpan.AddEvent("request", trace.WithAttributes(
+				attribute.String("raw", marshalPbMessage(req))),
 			)
 		}
 
 		err = invoker(ctx, method, req, resp, cc, opts...)
 		if err == nil {
 			if traceOpts.logPayloads {
-				clientSpan.AddEvent("start", trace.WithAttributes(
-					attribute.String("response", marshalPbMessage(resp))),
+				clientSpan.AddEvent("response", trace.WithAttributes(
+					attribute.String("raw", marshalPbMessage(resp))),
 				)
 			}
 		} else {

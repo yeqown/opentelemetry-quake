@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	conventions "go.opentelemetry.io/collector/model/semconv/v1.5.0"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/propagation"
@@ -78,10 +79,19 @@ func Tracing(config *Config) gin.HandlerFunc {
 		parentCtx := tc.Extract(c.Request.Context(), factory(c.Request.Header))
 		ctx, sp := otelquake.StartSpan(parentCtx, c.FullPath(),
 			trace.WithSpanKind(trace.SpanKindServer),
+			trace.WithAttributes(attribute.String(conventions.AttributeHTTPMethod, c.Request.Method)),
 		)
 		defer sp.End()
+
+		println("traceId: ", sp.SpanContext().TraceID().String())
+		println("sampled: ", sp.SpanContext().TraceFlags().IsSampled())
+
 		// inject trace context to gin context
 		inject(c, ctx)
+
+		// FIXME(@yeqown): root span could not hold events, so we need to create a child span to hold events.
+		//_, sp2 := otelquake.StartSpan(ctx, "logger")
+		//defer sp2.End()
 
 		// use custom writer, so we record the response body.
 		rbw := &respBodyWriter{
@@ -97,8 +107,8 @@ func Tracing(config *Config) gin.HandlerFunc {
 			}
 
 			// add start event and record request body.
-			sp.AddEvent("start",
-				trace.WithAttributes(attribute.String("request", pkg.ToString(body))),
+			sp.AddEvent("request",
+				trace.WithAttributes(attribute.String("raw", pkg.ToString(body))),
 			)
 		}
 
@@ -106,8 +116,8 @@ func Tracing(config *Config) gin.HandlerFunc {
 
 		// add end event and record response body.
 		if config.LogResponse {
-			sp.AddEvent("end",
-				trace.WithAttributes(attribute.String("response", rbw.body.String())),
+			sp.AddEvent("response",
+				trace.WithAttributes(attribute.String("raw", rbw.body.String())),
 			)
 		}
 
@@ -138,13 +148,6 @@ func extract(c *gin.Context) context.Context {
 	return v.(context.Context)
 }
 
-// StartSpan is a wrapper of opentelemetry.StartSpan, but it extracts span from gin.Context rather
-// than context.Context. The return span is that derived by root span which is created by Tracing middleware.
-func StartSpan(c *gin.Context, op string, opts ...trace.SpanStartOption) (ctx context.Context, sp trace.Span) {
-	ctx, sp = otelquake.StartSpan(extract(c), op, opts...)
-	return ctx, sp
-}
-
 func ContextFrom(c *gin.Context) context.Context {
 	return extract(c)
 }
@@ -173,20 +176,16 @@ func CaptureError() gin.HandlerFunc {
 			if r = recover(); r != nil {
 				panicked = true
 				// FIXED(@yeqown): record stack trace.
-				sp.RecordError(fmt.Errorf("%v", r))
+				sp.RecordError(fmt.Errorf("%v", r), trace.WithStackTrace(true))
 				// TODO(@yeqown): let user to decide whether re-panic or not.
 			}
 		}()
 
 		c.Next()
 
-		if c.Writer.Status() >= 400 || panicked {
+		if c.Writer.Status() >= 400 {
 			sp.SetStatus(codes.Error, "ERR")
-			if panicked {
-				sp.RecordError(fmt.Errorf("%v", r), trace.WithStackTrace(true))
-			} else {
-				sp.RecordError(fmt.Errorf("%v", c.Writer.Status()))
-			}
+			sp.RecordError(fmt.Errorf("%v", c.Writer.Status()))
 		} else {
 			sp.SetStatus(codes.Ok, "OK")
 		}

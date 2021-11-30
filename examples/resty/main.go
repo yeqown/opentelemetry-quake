@@ -22,13 +22,16 @@ func main() {
 	otelresty.InjectTracing(client)
 
 	// create a root span
-	ctx, sp := otelquake.StartSpan(context.Background(), "resty-main")
+	ctx, sp := otelquake.StartSpan(context.Background(), "client")
 	defer sp.End()
 
 	resp, err := client.
 		R().
 		SetContext(ctx).
-		Get("http://localhost:8080/ping")
+		SetBody(map[string]interface{}{
+			"name": "resty",
+		}).
+		Post("http://localhost:8080/greet?name=foo")
 	_ = resp
 	if err != nil {
 		println(err.Error())
