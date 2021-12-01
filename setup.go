@@ -25,10 +25,9 @@ func newExporter(so setupOption) (exp trace.SpanExporter, err error) {
 	case SENTRY:
 		exp, err = sentryexporter.New(so.sentryDSN)
 	case OTLP:
-
 		client := otlptracegrpc.NewClient(
 			otlptracegrpc.WithInsecure(),
-			//otlptracegrpc.WithEndpoint(), // TODO(@yeqown): allow parameters, such as host and port
+			otlptracegrpc.WithEndpoint(so.oltpEndpoint),
 		)
 		exp, err = otlptrace.New(context.Background(), client)
 	case JAEGER:

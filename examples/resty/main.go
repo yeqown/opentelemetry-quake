@@ -11,9 +11,9 @@ import (
 
 func main() {
 	shutdown := otelquake.MustSetup(
-		otelquake.WithServerName("resty"),
+		otelquake.WithServerName("resty-demo"),
 		//opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
-		otelquake.WithOtlpExporter(),
+		otelquake.WithOtlpExporter(""),
 		otelquake.WithSampleRate(1.0),
 	)
 	defer shutdown()

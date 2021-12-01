@@ -14,8 +14,8 @@ import (
 
 func main() {
 	shutdown, err := otelquake.Setup(
-		otelquake.WithServerName("grpc-server"),
-		otelquake.WithOtlpExporter(),
+		otelquake.WithServerName("grpc-demo"),
+		otelquake.WithOtlpExporter(""),
 		otelquake.WithSampleRate(1.0),
 	)
 	defer shutdown()

@@ -18,23 +18,27 @@ type setupOption struct {
 	serverName string
 	version    string
 	env        string
+	namespace  string
 
 	exporter exporterEnum
 
 	jaegerAgentHost string // jaegerAgentHost is the hostname of the jaeger agent.
-	sentryDSN       string // it could not be empty while useSentry is true.
+	sentryDSN       string // it could not be empty while exporter is SENTRY.
+	oltpEndpoint    string // it could not be empty while exporter is OTLP.
 
 	sampleRatio float64 // sampleRatio is the sampling ratio of trace. 1.0 means 100% sampling, 0 means 0% sampling.
 }
 
 var (
 	defaultSetupOpt = setupOption{
-		serverName:      "",
+		serverName:      "unknown",
 		version:         "v0.0.0",
-		sentryDSN:       "",
-		env:             "",
+		env:             "default",
 		exporter:        JAEGER,
 		jaegerAgentHost: "127.0.0.1",
+		sentryDSN:       "",
+		oltpEndpoint:    "localhost:4317",
+		sampleRatio:     .2,
 	}
 
 	ErrUnknownExporter      = errors.New("unknown exporterEnum type")
@@ -90,6 +94,24 @@ func WithServerName(name string) SetupOption {
 	})
 }
 
+func WithServerVersion(version string) SetupOption {
+	return fnSetupOption(func(o *setupOption) {
+		o.version = version
+	})
+}
+
+func WithEnv(env string) SetupOption {
+	return fnSetupOption(func(o *setupOption) {
+		o.env = env
+	})
+}
+
+func WithNamespace(namespace string) SetupOption {
+	return fnSetupOption(func(o *setupOption) {
+		o.namespace = namespace
+	})
+}
+
 func WithSentryExporter(dsn string) SetupOption {
 	return fnSetupOption(func(o *setupOption) {
 		o.exporter = SENTRY
@@ -108,8 +130,13 @@ func WithJaegerExporter(agentHost string) SetupOption {
 	})
 }
 
-func WithOtlpExporter() SetupOption {
+func WithOtlpExporter(endpoint string) SetupOption {
 	return fnSetupOption(func(o *setupOption) {
+		if endpoint != "" {
+			// 如果没有指定endpoint，则使用默认的HOST和端口 localhost:4317
+			// TODO(@yeqown): 使用 agent 模式部署 otelcol 后，采用 NodeIP:4317 作为默认值
+			o.oltpEndpoint = endpoint
+		}
 		o.exporter = OTLP
 	})
 }

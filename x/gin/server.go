@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	conventions "go.opentelemetry.io/collector/model/semconv/v1.5.0"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/propagation"
@@ -79,19 +78,11 @@ func Tracing(config *Config) gin.HandlerFunc {
 		parentCtx := tc.Extract(c.Request.Context(), factory(c.Request.Header))
 		ctx, sp := otelquake.StartSpan(parentCtx, c.FullPath(),
 			trace.WithSpanKind(trace.SpanKindServer),
-			trace.WithAttributes(attribute.String(conventions.AttributeHTTPMethod, c.Request.Method)),
 		)
 		defer sp.End()
 
-		println("traceId: ", sp.SpanContext().TraceID().String())
-		println("sampled: ", sp.SpanContext().TraceFlags().IsSampled())
-
 		// inject trace context to gin context
 		inject(c, ctx)
-
-		// FIXME(@yeqown): root span could not hold events, so we need to create a child span to hold events.
-		//_, sp2 := otelquake.StartSpan(ctx, "logger")
-		//defer sp2.End()
 
 		// use custom writer, so we record the response body.
 		rbw := &respBodyWriter{
