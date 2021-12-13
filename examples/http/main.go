@@ -6,23 +6,21 @@ import (
 	"log"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 
-	"github.com/gin-gonic/gin"
-
-	otelquake "github.com/yeqown/opentelemetry-quake"
+	tracing "github.com/yeqown/opentelemetry-quake"
+	tracinggin "github.com/yeqown/opentelemetry-quake/contrib/gin"
+	tracinggrpc "github.com/yeqown/opentelemetry-quake/contrib/grpc"
 	pb "github.com/yeqown/opentelemetry-quake/examples/api"
-	sentryexporter "github.com/yeqown/opentelemetry-quake/sentryexporter"
-	otelgin "github.com/yeqown/opentelemetry-quake/x/gin"
-	otelgrpc "github.com/yeqown/opentelemetry-quake/x/grpc"
 )
 
 func main() {
-	shutdown, err := otelquake.Setup(
-		//otelquake.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
-		otelquake.WithOtlpExporter(""),
-		otelquake.WithServerName("http-demo"),
-		otelquake.WithSampleRate(1.0),
+	shutdown, err := tracing.Setup(
+		//tracing.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
+		tracing.WithOtlpExporter(""),
+		tracing.WithServerName("http-demo"),
+		tracing.WithSampleRate(1.0),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -31,16 +29,16 @@ func main() {
 
 	r := gin.Default()
 	r.Use(
-		otelgin.Tracing(otelgin.DefaultConfig().
-			ApplyCarrierFactory(sentryexporter.CarrierFactory).
-			EnableLogPayloads(),
+		tracinggin.Tracing(
+			tracinggin.WithCarrierFactory(tracinggin.SentryCarrierAdaptor),
+			tracinggin.WithRecordPayloads(),
 		),
-		otelgin.CaptureError(),
+		tracinggin.CaptureException(true),
 	)
 
 	cc, err2 := grpc.Dial("localhost:8000",
 		grpc.WithInsecure(),
-		grpc.WithChainUnaryInterceptor(otelgrpc.TracingClientInterceptor(otelgrpc.LogPayloads())),
+		grpc.WithChainUnaryInterceptor(tracinggrpc.TracingClientInterceptor(tracinggrpc.LogPayloads())),
 		grpc.WithBlock(),
 	)
 	if err2 != nil {
@@ -62,13 +60,13 @@ func main() {
 		}
 
 		// remote process call
-		ctx := otelgin.ContextFrom(c)
+		ctx := tracinggin.TracingContextFrom(c)
 		if _, err = client.SayHello(ctx, &pb.HelloRequest{Name: req.Name}); err != nil {
 			c.JSON(400, gin.H{"error": err.Error()})
 		}
 
 		// internal process, brother span
-		processWithSpan(otelgin.ContextFrom(c))
+		processWithSpan(ctx)
 
 		c.JSON(200, gin.H{"message": "pong"})
 	})
@@ -85,7 +83,7 @@ func main() {
 
 func processWithSpan(ctx context.Context) {
 	// start a span
-	ctx, sp := otelquake.StartSpan(ctx, "processWithSpan")
+	ctx, sp := tracing.StartSpan(ctx, "processWithSpan")
 	defer sp.End()
 
 	// sleep 100ms

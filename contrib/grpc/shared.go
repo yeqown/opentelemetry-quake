@@ -1,24 +1,22 @@
-package otelgrpc
+package tracinggrpc
 
 import (
 	"context"
 	"fmt"
 	"strings"
 
-	"go.opentelemetry.io/otel/propagation"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/runtime/protoiface"
+	"google.golang.org/protobuf/runtime/protoimpl"
 
+	tracing "github.com/yeqown/opentelemetry-quake"
 	"github.com/yeqown/opentelemetry-quake/pkg"
 )
 
-const (
-	tracerName = "opentelemetry/x/grpc"
-)
-
 var (
-	_ propagation.TextMapCarrier = (*metadataCarrier)(nil)
+	_ tracing.TraceContextCarrier = (*metadataCarrier)(nil)
 	// 将 pb.Message 处理为 JSON string 而不是使用默认的编码
 	jsonMarshallar = protojson.MarshalOptions{
 		EmitUnpopulated: true, // 打印零值
@@ -41,14 +39,6 @@ func (w metadataCarrier) Get(key string) string {
 	return values[0]
 }
 
-func (w metadataCarrier) Keys() []string {
-	keys := make([]string, 0, w.MD.Len())
-	for k := range w.MD {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
 func (w metadataCarrier) Set(key, val string) {
 	// The GRPC HPACK implementation rejects any uppercase keys here.
 	//
@@ -59,29 +49,13 @@ func (w metadataCarrier) Set(key, val string) {
 	w.MD[key] = append(w.MD[key], val)
 }
 
-//func (w metadataCarrier) ForeachKey(handler func(key, val string) error) error {
-//	for k, vals := range w.MD {
-//		for _, v := range vals {
-//			if err := handler(k, v); err != nil {
-//				return err
-//			}
-//		}
-//	}
-//
-//	return nil
-//}
-
 func extractSpanContext(ctx context.Context) context.Context {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		md = metadata.New(nil)
 	}
 
-	tc := propagation.TraceContext{}
-	ctxWithSpan := tc.Extract(ctx, metadataCarrier{MD: md})
-	//sc := trace.SpanContextFromContext(ctxWithSpan)
-
-	return ctxWithSpan
+	return tracing.GetPropagator().Extract(ctx, metadataCarrier{MD: md})
 }
 
 func injectSpanContext(ctx context.Context) context.Context {
@@ -92,21 +66,25 @@ func injectSpanContext(ctx context.Context) context.Context {
 		md = md.Copy()
 	}
 
-	tc := propagation.TraceContext{}
-	tc.Inject(ctx, metadataCarrier{MD: md})
+	tracing.GetPropagator().Inject(ctx, metadataCarrier{MD: md})
 	return metadata.NewOutgoingContext(ctx, md)
 }
 
 func marshalPbMessage(v interface{}) string {
-	m, ok := v.(proto.Message)
-	if !ok {
-		return fmt.Sprintf("%s", v)
+	switch v.(type) {
+	case protoiface.MessageV1:
+		if bytes, err := jsonMarshallar.Marshal(
+			protoimpl.X.ProtoMessageV2Of(v.(protoiface.MessageV1)), // convert to proto.Message
+		); err == nil {
+			return pkg.ToString(bytes)
+		}
+
+	case proto.Message:
+		if bytes, err := jsonMarshallar.Marshal(v.(proto.Message)); err == nil {
+			return pkg.ToString(bytes)
+		}
 	}
 
-	bytes, err := jsonMarshallar.Marshal(m)
-	if err != nil {
-		return fmt.Sprintf("%s", v)
-	}
+	return fmt.Sprintf("%s", v)
 
-	return pkg.ToString(bytes)
 }

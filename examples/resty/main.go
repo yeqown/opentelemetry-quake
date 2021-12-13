@@ -5,24 +5,24 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
-	otelquake "github.com/yeqown/opentelemetry-quake"
-	"github.com/yeqown/opentelemetry-quake/x/resty"
+	tracing "github.com/yeqown/opentelemetry-quake"
+	tracingresty "github.com/yeqown/opentelemetry-quake/contrib/resty"
 )
 
 func main() {
-	shutdown := otelquake.MustSetup(
-		otelquake.WithServerName("resty-demo"),
+	shutdown := tracing.MustSetup(
+		tracing.WithServerName("resty-demo"),
 		//opentelemetry.WithSentryExporter("https://SECRECT@sentry.example.com/7"),
-		otelquake.WithOtlpExporter(""),
-		otelquake.WithSampleRate(1.0),
+		tracing.WithOtlpExporter(""),
+		tracing.WithSampleRate(1.0),
 	)
 	defer shutdown()
 
 	client := resty.New()
-	otelresty.InjectTracing(client)
+	tracingresty.InjectTracing(client)
 
 	// create a root span
-	ctx, sp := otelquake.StartSpan(context.Background(), "client")
+	ctx, sp := tracing.StartSpan(context.Background(), "client")
 	defer sp.End()
 
 	resp, err := client.
@@ -38,6 +38,6 @@ func main() {
 		return
 	}
 
-	println("trace info:", sp.SpanContext().TraceID().String())
-	println("span info:", sp.SpanContext().SpanID().String())
+	println("trace info:", sp.SpanContext().TraceID)
+	println("span info:", sp.SpanContext().SpanID)
 }

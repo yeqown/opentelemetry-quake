@@ -1,4 +1,4 @@
-package otelgrpc
+package tracinggrpc
 
 // Option instances may be used in OpenTracing(Server|Client)Interceptor
 // initialization.

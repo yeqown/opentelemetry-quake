@@ -1,11 +1,10 @@
-package otelresty_test
+package tracingresty_test
 
 import (
 	"context"
 
 	"github.com/go-resty/resty/v2"
-
-	otelresty "github.com/yeqown/opentelemetry-quake/x/resty"
+	otelresty "github.com/yeqown/opentelemetry-quake/contrib/resty"
 )
 
 func ExampleInjectTracing() {

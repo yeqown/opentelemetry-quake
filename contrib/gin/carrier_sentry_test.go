@@ -1,4 +1,4 @@
-package sentry
+package tracinggin
 
 import "testing"
 
@@ -42,8 +42,8 @@ func Test_convertSentryTraceToParent(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertSentryTraceToParent(tt.args.sentryTrace); got != tt.want {
-				t.Errorf("convertSentryTraceToParent() = %v, want %v", got, tt.want)
+			if got := translateSentryToOpenTelemetry(tt.args.sentryTrace); got != tt.want {
+				t.Errorf("translateSentryToOpenTelemetry() = %v, want %v", got, tt.want)
 			}
 		})
 	}

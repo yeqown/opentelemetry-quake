@@ -1,27 +1,27 @@
 package main
 
 import (
-	context "context"
+	"context"
 	"net"
 	"time"
 
 	"google.golang.org/grpc"
 
-	otelquake "github.com/yeqown/opentelemetry-quake"
+	tracing "github.com/yeqown/opentelemetry-quake"
+	tracinggrpc "github.com/yeqown/opentelemetry-quake/contrib/grpc"
 	pb "github.com/yeqown/opentelemetry-quake/examples/api"
-	otelgrpc "github.com/yeqown/opentelemetry-quake/x/grpc"
 )
 
 func main() {
-	shutdown, err := otelquake.Setup(
-		otelquake.WithServerName("grpc-demo"),
-		otelquake.WithOtlpExporter(""),
-		otelquake.WithSampleRate(1.0),
+	shutdown, err := tracing.Setup(
+		tracing.WithServerName("grpc-demo"),
+		tracing.WithOtlpExporter(""),
+		tracing.WithSampleRate(1.0),
 	)
 	defer shutdown()
 
 	s := grpc.NewServer(
-		grpc.ChainUnaryInterceptor(otelgrpc.TracingServerInterceptor(otelgrpc.LogPayloads())),
+		grpc.ChainUnaryInterceptor(tracinggrpc.TracingServerInterceptor(tracinggrpc.LogPayloads())),
 		grpc.ConnectionTimeout(10*time.Second),
 	)
 	pb.RegisterGreeterServer(s, new(greeterServer))
