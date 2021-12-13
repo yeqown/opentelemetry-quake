@@ -10,7 +10,7 @@ import (
 
 var (
 	tracerInstrumentationLibName = "github.com/yeqown/opentelemetry-quake"
-	tracerInstrumentationVersion = "v1.2.4"
+	tracerInstrumentationVersion = "v1.3.0"
 )
 
 var (
