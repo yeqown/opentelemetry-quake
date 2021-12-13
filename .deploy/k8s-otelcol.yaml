@@ -35,7 +35,7 @@
 #    extensions:
 #      zpages: {}
 #    service:
-#      extensions: [zpages, sentry]
+#      extensions: [zpages, sentryexporter]
 #      pipelines:
 #        traces:
 #          receivers: [otlp]

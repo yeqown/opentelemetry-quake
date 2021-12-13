@@ -2,7 +2,7 @@
 
 用于扩展 opentelemetry 的 `Span Exporter` 和 `Trace Exporter`。
 
-- [sentry](./sentry)
+- [sentry](./sentryexporter)
 
 ### 说明
 
