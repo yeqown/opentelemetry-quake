@@ -20,10 +20,10 @@
 - [x] 采集堆栈信息
 - [x] 跟前端链路打通
 - [x] 中间件完成与优化
-- [ ] 处理代码中 `TODO` 和 `FIXME`
+- [x] 处理代码中 `TODO` 和 `FIXME`
 - [x] 记录请求和响应（可选）
 - [ ] 补充测试用例
-- [ ] 改造 sentryexporter（TraceExporter）记录 StackTrace信息或者给官方提交 PR
+- [x] 改造 sentryexporter（TraceExporter）记录 StackTrace信息或者给官方提交 PR
 
 ### [Examples](./examples/README.md)
 
